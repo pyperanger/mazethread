@@ -59,8 +59,8 @@ main(int argc, char* argv[])
     if(orgarg(argc, argv, &race) != 0 || argc < 2) // Organize the arguments 
         help();
 
-    
-
+    if(meters(&race) != 0)
+       die("Impossible to find meters number\n"); 
 
     return 0;
 }
