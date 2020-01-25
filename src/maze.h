@@ -9,4 +9,6 @@
 struct racebj {
     unsigned int runners;
     unsigned int endline;
+    int seed;
+    int end;
 };

@@ -5,9 +5,14 @@
 */
 // MAZE HEADER
 #include "maze.h"
+#include "rrand.h"
+#include "racing.h"
+
 #include <stdio.h>
 #include <getopt.h>
+#include <pthread.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #define die(STR)    \
 {                   \
@@ -16,12 +21,21 @@
 }
 
 
-void help()
+void
+help()
 {
     printf("Welcome to Maze Thread Race 2020\n"
-           "-t\t- number of thread.. or runners\n"
+           "-t\t- number of thread.. or runners(minimum 4)\n"
            "-h\t- this message output\n");
     die("life is short, try u best or die like the rest\n");
+}
+
+void telao(struct racebj tbj)
+{
+    printf("Welcome to Maze Thread Runner 2020\n"
+           "Competitors: %d\n"
+           "Endline: %d\n"
+           "Good look for all\n", tbj.runners, tbj.endline);
 }
 
 int
@@ -37,7 +51,10 @@ orgarg(int argc,  char** argv, struct racebj* raceopt)
                 ret = 1;
                 break;
             case 't':
-                raceopt->runners = strtol(optarg, NULL, 10) > MAX_THREAD ? MAX_THREAD : strtol(optarg, NULL, 10); 
+                if(atoi(optarg) >= MIN_THREAD)
+                    raceopt->runners = strtol(optarg, NULL, 10) > MAX_THREAD ? MAX_THREAD : strtol(optarg, NULL, 10);
+                else
+                    raceopt->runners = MIN_THREAD;
                 break;
             case '?':
                 ret = 1; 
@@ -61,6 +78,18 @@ main(int argc, char* argv[])
 
     if(meters(&race) != 0)
        die("Impossible to find meters number\n"); 
+
+    telao(race);
+
+    // prepare runners
+    pthread_t tid[race.runners];
+    race.end = 0; 
+
+    for(short int i = 0; i < race.runners ; i++)
+    {
+        pthread_create(&tid[i], NULL, rungo, &race);
+    }
+   
 
     return 0;
 }

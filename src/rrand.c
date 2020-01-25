@@ -4,13 +4,27 @@
 */
 #include "rrand.h"
 #include <time.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-int meters(struct racebj* race)
+int tryharder(struct racebj* race) // return a number in context of endline
 {
+    srand(race->seed);
+    return rand() % (race->runners * 5);
+}
+
+int meters(struct racebj* race) // objetive number 
+{
+    int range;
     struct timespec ts;
 
-    clock_gettime(CLOCK_MONOTONIC, &ts);
+    range = race->runners * 5; 
 
+    clock_gettime(CLOCK_MONOTONIC, &ts); // ignore clang erros 
+    race->seed = (int)ts.tv_nsec; 
+    srand(race->seed);
+    
+    race->endline = rand() % range;
 
     return 0;
 }
