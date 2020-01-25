@@ -1,3 +1,4 @@
 #pragma once
 
-void* rungo(void *racego);
+void*
+rungo(void* racego);

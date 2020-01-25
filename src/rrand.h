@@ -2,5 +2,7 @@
 
 #include "maze.h"
 
-int meters(struct racebj* race);
-int tryharder(struct racebj* race);
+int
+meters(struct racebj* race);
+int
+tryharder(struct racebj* race);
